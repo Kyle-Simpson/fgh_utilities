@@ -1,2 +1,2 @@
 # fgh_utilities
-Code written for FGH team creating utility functions
+Some samples of code written for FGH team creating utility functions
