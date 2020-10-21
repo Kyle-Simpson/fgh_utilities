@@ -1,0 +1,116 @@
+---
+# Channel-agnostic references
+# report_year : 2020
+# abrv_year : 20
+# prev_report_year : 2019
+# prev_abrv_year : 19
+# defl_MMYY : '1019'
+
+report_year : 2019
+abrv_year : 19
+prev_report_year : 2018
+prev_abrv_year : 18
+defl_MMYY : "1019"
+prev_defl_MMYY : "0718"
+
+# Channel-specific references
+CRS :
+  update_MMYY : '1019'
+  prev_update_MMYY : '0119'
+  data_year : 2017
+GAVI :
+  income_update_year : '0819'
+  disb_update_year : '0919'
+GFATM :
+  update_DDMMYY : '140120'
+  pldg_cont_YYYYMMDD : '20200114'
+PMI :
+  update_MMYY : '0719'
+WB :
+  correspondence_YYYY_MM_DD : '2019_10_15'
+  proj_download_YYYY_MM_DD : '2019_09_25'
+
+
+
+# Misc.
+required_cols :
+  raw : []
+  stage00 : []
+  stage01 : []
+  stageETC : []
+  fin : ['year_id', 'ihme_loc_id', 'DAH_[abrv_year]']
+
+valid_observations :
+  CHANNEL : ['AfDB', 'AsDB', 'BIL_ARE', 'BIL_AUS', 'BIL_AUT', 'BIL_BEL', 'BIL_CAN', 'BIL_CHE', 'BIL_CHN', 'BIL_DEU', 
+             'BIL_DNK', 'BIL_ESP', 'BIL_FIN', 'BIL_FRA', 'BIL_GBR', 'BIL_GRC', 'BIL_IRL', 'BIL_ITA', 'BIL_JPN', 'BIL_KOR', 
+             'BIL_LUX', 'BIL_NLD', 'BIL_NOR', 'BIL_NZL', 'BIL_PRT', 'BIL_SWE', 'BIL_USA', 'BMGF', 'CEPI', 'EC', 'EEA', 'GAVI', 
+             'GFATM', 'IDB', 'INTL_NGO', 'INTLNGO', 'NGO', 'NIH', 'PAHO', 'UNAIDS', 'UNFPA', 'UNICEF', 'UNITAID', 'US_FOUND', 
+             'WB', 'WB_IBRD', 'WB_IDA', 'WELLCOME', 'WHO']
+  DONOR_COUNTRY : ['AUSTRALIA', 'AUSTRIA', 'BELGIUM', 'CANADA', 'DENMARK', 'FINLAND', 'FRANCE', 'GERMANY', 'GREECE', 'IRELAND', 
+                   'ITALY', 'JAPAN', 'LUXEMBOURG', 'NETHERLANDS', 'NEW ZEALAND', 'NORWAY', 'PORTUGAL', 'SOUTH KOREA', 'SPAIN', 
+                   'SWEDEN', 'SWITZERLAND', 'UNITED ARAB EMIRATES', 'UNITED KINGDOM', 'UNITED STATES']
+  ELIM_CH : [0, 1]
+  ELIM_DONOR : [0, 1]
+  GBD_REGION_NAME : ['Andean Latin America', 'Caribbean', 'Central Asia', 'Central Europe', 'Central Latin America', 
+                     'Central Sub-Saharan Africa', 'East Asia', 'Eastern Europe', 'Eastern Sub-Saharan Africa', 'Global', 
+                     'High-income Asia Pacific', 'North Africa and Middle East', 'Oceania', 'South Asia', 'Southeast Asia', 
+                     'Southern Latin America', 'Southern Sub-Saharan Africa', 'Tropical Latin America', 'Unallocable', 
+                     'Western Europe', 'Western Sub-Saharan Africa']
+  GBD_SUPERREGION_NAME : ['Central Europe, Eastern Europe, and Central Asia', 'Global', 'Latin America and Caribbean', 
+                          'North Africa and Middle East', 'South Asia', 'Southeast Asia, East Asia, and Oceania', 
+                          'Sub-Saharan Africa', 'Unallocable']
+  GOV : [0, 1, 2]
+  INC_GROUP : ['..', 'L', 'LM', 'UM']
+  INCOME_SECTOR : ['BMGF', 'DEBT', 'INK', 'OTHER', 'PRIVATE', 'PUBLIC', 'UNALL']
+  INCOME_TYPE : ['CENTRAL', 'CORP', 'DEVBANK', 'EC', 'FOUND', 'INDIV', 'LOCAL', 'NA', 'NGO', 'Other', 'OTHER', 'PPP', 
+                 'PRIVATE', 'SOC', 'UN', 'UNALL', 'UNIV', 'UNSP']
+  INKIND : [0, 1, 2]
+  ISO_CODE : ['ABW', 'AFG', 'AGO', 'ALB', 'AND', 'APR', 'ARE', 'ARG', 'ARM', 'ATG', 'AUS', 'AUT', 'AZE', 'BDI', 'BEL', 'BEN', 'BFA', 'BGD', 
+              'BGR', 'BHR', 'BHS', 'BIH', 'BLR', 'BLZ', 'BMGF', 'BOL', 'BRA', 'BRB', 'BRN', 'BTN', 'BWA', 'CAF', 'CAN', 'CHE', 'CHL', 'CHN', 
+              'CIV', 'CMR', 'COD', 'COG', 'COK', 'COL', 'COM', 'CPV', 'CRI', 'CUB', 'CYM', 'CYP', 'CZE', 'CZE_FRMR', 'DEBT', 'DEU', 'DJI', 
+              'DMA', 'DNK', 'DOM', 'DZA', 'ECU', 'EGY', 'ERI', 'ESP', 'EST', 'ETH', 'FIN', 'FJI', 'FRA', 'FSM', 'GAB', 'GBR', 'GEO', 'GHA', 'GIB', 
+              'GIN', 'GMB', 'GNB', 'GNQ', 'GRC', 'GRD', 'GTM', 'GUM', 'GUY', 'HKG', 'HND', 'HRV', 'HTI', 'HUN', 'IDN', 'IND', 'IRL', 'IRN', 'IRQ', 
+              'ISL', 'ISR', 'ITA', 'JAM', 'JOR', 'JPN', 'KAZ', 'KEN', 'KGZ', 'KHM', 'KIR', 'KNA', 'KOR', 'KSV', 'KWT', 'LAO', 'LBN', 'LBR', 'LBY', 
+              'LCA', 'LIE', 'LKA', 'LSO', 'LTU', 'LUX', 'LVA', 'MAC', 'MAR', 'MCO', 'MDA', 'MDG', 'MDV', 'MEX', 'MHL', 'MKD', 'MLI', 'MLT', 'MMR', 
+              'MNE', 'MNG', 'MOZ', 'MRT', 'MUS', 'MWI', 'MYS', 'NA', 'NAM', 'NCL', 'NER', 'NGA', 'NGO', 'NIC', 'NIU', 'NLD', 'NOR', 'NPL', 'NRU', 
+              'NZL', 'OMN', 'OTHER', 'PAK', 'PAN', 'PER', 'PHL', 'PLW', 'PNG', 'POL', 'PRI', 'PRIVATE', 'PRK', 'PRT', 'PRY', 'PSE', 'QAT', 'QTA', 
+              'QZA', 'ROU', 'RUS', 'RWA', 'SAU', 'SCG', 'SDN', 'SEN', 'SGP', 'SLB', 'SLE', 'SLV', 'SMR', 'SOM', 'SRB', 'SSD', 'STP', 'SUR', 'SVK', 
+              'SVN', 'SWE', 'SWZ', 'SYC', 'SYR', 'TCA', 'TCD', 'TGO', 'THA', 'TJK', 'TKL', 'TKM', 'TLS', 'TON', 'TTO', 'TUN', 'TUR', 'TUV', 'TWN', 
+              'TZA', 'UGA', 'UKR', 'UNALL', 'URY', 'USA', 'USSR_FRMR', 'UZB', 'VAT', 'VCT', 'VEN', 'VGB', 'VNM', 'VUT', 'WB', 'WSM', 'YEM', 'YUG_FRMR', 
+              'ZAF', 'ZMB', 'ZWE']
+  ISO3_RC : ['AFG', 'AGO', 'AIA', 'ALB', 'ANT', 'ARG', 'ARM', 'ATG', 'AZE', 'BDI', 'BEN', 'BFA', 'BGD', 'BGR', 'BHR', 'BIH', 'BLR', 'BLZ', 'BOL', 
+             'BRA', 'BRB', 'BTN', 'BWA', 'CAF', 'CHL', 'CHN', 'CIV', 'CMR', 'COD', 'COG', 'COK', 'COL', 'COM', 'CPV', 'CRI', 'CUB', 'CXR', 'CZE', 
+             'DJI', 'DMA', 'DOM', 'DZA', 'ECU', 'EGY', 'ERI', 'EST', 'ETH', 'FJI', 'FSM', 'GAB', 'GEO', 'GHA', 'GIN', 'GMB', 'GNB', 'GNQ', 'GRD', 
+             'GTM', 'GUY', 'HND', 'HRV', 'HTI', 'HUN', 'IDN', 'IND', 'IRN', 'IRQ', 'JAM', 'JOR', 'KAZ', 'KEN', 'KGZ', 'KHM', 'KIR', 'KNA', 'KOR', 
+             'KSV', 'LAO', 'LBN', 'LBR', 'LBY', 'LCA', 'LKA', 'LSO', 'LTU', 'LVA', 'MAR', 'MDA', 'MDG', 'MDV', 'MEX', 'MHL', 'MKD', 'MLI', 'MLT', 
+             'MMR', 'MNE', 'MNG', 'MNP', 'MOZ', 'MRT', 'MSR', 'MUS', 'MWI', 'MYS', 'MYT', 'NAM', 'NER', 'NGA', 'NIC', 'NIU', 'NPL', 'NRU', 'OMN', 
+             'PAK', 'PAN', 'PER', 'PHL', 'PLW', 'PNG', 'POL', 'PRK', 'PRY', 'PSE', 'QMA', 'QMZ', 'QNC', 'QNE', 'QPA', 'QPB', 'QRA', 'QSD', 'QSE', 
+             'QTA', 'QZA', 'ROU', 'RUS', 'RWA', 'SAU', 'SDN', 'SEN', 'SHN', 'SLB', 'SLE', 'SLV', 'SOM', 'SRB', 'SSD', 'STP', 'SUR', 'SVK', 'SVN', 
+             'SWZ', 'SYC', 'SYR', 'TCA', 'TCD', 'TGO', 'THA', 'TJK', 'TKL', 'TKM', 'TLS', 'TON', 'TTO', 'TUN', 'TUR', 'TUV', 'TZA', 'UGA', 'UKR', 
+             'URY', 'UZB', 'VCT', 'VEN', 'VNM', 'VUT', 'WLD', 'WLF', 'WSM', 'YEM', 'ZAF', 'ZMB', 'ZWE']
+  LEVEL : ['COUNTRY', 'COUNTRY_backcasted', 'COUNTRY_disaggregated', 'COUNTRY_split', 'GLOBAL', 'REGIONAL', 'UNALLOCABLE']
+  PRELIM_EST : [0, 1]
+  RECIPIENT_COUNTRY : ['Afghanistan', 'Albania', 'Algeria', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Azerbaijan', 'Bahrain', 
+                       'Bangladesh', 'Barbados', 'Belarus', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Bulgaria', 
+                       'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Cape Verde', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 
+                       'Colombia', 'Comoros', 'Congo', 'Cook Islands', 'Costa Rica', "Cote d'Ivoire", 'Croatia', 'Cuba', 'Czech Republic', 
+                       'Democratic Republic of the Congo', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 
+                       'Eritrea', 'Estonia', 'Ethiopia', 'Federated States of Micronesia', 'Fiji', 'Gabon', 'Georgia', 'Ghana', 'GLOBAL', 'Grenada', 'Guatemala', 
+                       'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'India', 'Indonesia', 'Iran', 'Iraq', 'Jamaica', 'Jordan', 'Kazakhstan', 
+                       'Kenya', 'Kiribati', 'Kosovo', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Lithuania', 'Macedonia', 'Madagascar', 
+                       'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Moldova', 'Mongolia', 
+                       'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands Antilles', 'Nicaragua', 'Niger', 
+                       'Nigeria', 'Niue', 'North Korea', 'Northern Mariana Islands', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 
+                       'Peru', 'Philippines', 'Poland', 'Romania', 'Russia', 'Rwanda', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia', 
+                       'Saint Vincent and the Grenadines', 'Samoa', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Slovakia', 
+                       'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Sri Lanka', 'Sudan', 'Suriname', 'Swaziland', 'Syria', 
+                       'Tajikistan', 'Tanzania', 'Thailand', 'The Gambia', 'Timor-Leste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 
+                       'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela', 'Vietnam', 
+                       'Wallis and Futuna Islands', 'Yemen', 'Zambia', 'Zimbabwe']
+  REPORTING_AGENCY : ['AfDB', 'AsDB', 'BACKCASTING', 'BIL_CHINA', 'BMGF', 'CEPI', 'CRS', 'EC', 'EEA', 'GAVI', 'GFATM', 'IDB', 
+                      'NGO', 'PAHO', 'UNAIDS', 'UNFPA', 'UNICEF', 'UNITAID', 'US_FOUND', 'WB', 'WB_IBRD', 'WHO']
+  SOURCE_CH : ['AfDB', 'AsDB', 'GAVI', 'GFATM', 'PAHO', 'UNAIDS', 'UNFPA', 'UNICEF', 'WB', 'WB_IBRD', 'WHO']
+  WB_REGION : ['East Asia & Pacific', 'Europe & Central Asia', 'Global', 'Latin America & Caribbean', 'Middle East & North Africa', 
+               'South Asia', 'Sub-Saharan Africa', 'Unallocable']
+  WB_REGIONCODE : ['EAP', 'ECA', 'LAC', 'MNA', 'SAS', 'SSA', 'WLD']
+  YEAR : ['1990:[report_year]']
