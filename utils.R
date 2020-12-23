@@ -84,8 +84,7 @@ string_clean <- function(dataset, col_to_clean) {
   
   # Handle user errors
   if (col_to_clean %ni% names(dataset)) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [col_to_clean]!! ENSURE [col_to_clean] IS ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [col_to_clean]!! ENSURE [col_to_clean] IS ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
   }
   
   # Prep dataset
@@ -418,20 +417,21 @@ get_path <- function(channel, stage, is_backup=F) {
 ensure_dir <- function(filepath) {
   # If filepath doesn't exist, create it (recursively)
   if (!dir.exists(filepath)) {
-    dir.create(filepath, recursive = T)
+    dir.create(filepath, recursive = T, mode = '0777')# Open read/write permissions
     cat(paste0('  Directory created at: ', filepath, '\n'))
   } 
   
-  # If directory has some strange read/write permissions, update it
+  # If directory has some strange read/write permissions, flag that
   tryCatch({
     # Try writing a file
     test <- data.table('test' = 1)
     fwrite(test, paste0(filepath, 'test.csv'))
   }, warning = function(warning_condition) {
-    cat(warning_condition)
+    warning(warning_condition)
   }, error = function() {
     # If unable to write the file, change the directory permissions
-    system(paste0("chmod -R 0777 ", filepath))
+    usr <- file.info(filepath)$uname
+    warning(paste0(yellow('  WARNING: RESTRICTED DIRECTORY PERMISSIONS. CONTACT ', usr, ' TO UPDATE PERMISSIONS IF NEEDED.\n')))
   }, finally = {
     # Remove the test write file if it was created
     unlink(paste0(filepath, 'test.csv'))
@@ -477,17 +477,21 @@ save_dataset <- function(dataset, filename, channel, stage, write_dta = F) {
     # Save to primary location
     options(warn=-1) # Remove warnings for mismatching length of variable labels
     save.dta13(dataset, file=paste0(primary_location, filename, '.dta'))
+    system(paste0('chmod -R 0777 ', primary_location, filename, '.dta'))
     cat(green(paste0('  ', filename, '.dta saved to: '))); cat(paste0(primary_location, '\n'))
     # Save to backup location
     save.dta13(dataset, file=paste0(backup_location, filename, '_', date, '.dta'))
+    system(paste0('chmod -R 0777 ', backup_location, filename, '_', date, '.dta'))
     cat(blue(paste0('  Backup saved to: '))); cat(paste0(backup_location, '\n'))
     options(warn=0)
   } else {
     # Save to primary location
     fwrite(dataset, file=paste0(primary_location, filename, '.csv'))
+    system(paste0('chmod -R 0777 ', primary_location, filename, '.csv'))
     cat(green(paste0('  ', filename, '.csv saved to: '))); cat(paste0(primary_location, '\n'))
     # Save to backup location
     fwrite(dataset, file=paste0(backup_location, filename, '_', date, '.csv'))
+    system(paste0('chmod -R 0777 ', backup_location, filename, '_', date, '.csv'))
     cat(blue(paste0('  Backup saved to: '))); cat(paste0(backup_location, '\n'))
   }
 }
@@ -602,7 +606,7 @@ check_hfa_sum <- function(dataset, health_focus_area, program_areas, return_viol
   # Print warning if children don't have save prefix as parent
   for (program_area in program_areas) {
     if (chr(str_split(program_area, "_")[[1]][1]) != chr(str_split(health_focus_area, "_")[[1]][1])) {
-      cat("    WARNING: `program_areas` prefix doesn't match `health_focus_area` prefix.  You may have mistyped a program area.\n")
+      warning("    [program_areas] prefix doesn't match [health_focus_area] prefix.  You may have mistyped a program area.\n")
     }
   }
   
@@ -642,8 +646,7 @@ check_neg_disb <- function(dataset, col_names, return_violations = F) {
   
   # Check to make sure col_names are valid columns in dataset
   if (any(col_names %ni% names(dataset))) {
-    cat(red(paste0('    ERROR: Invalid col_names specified.\n')))
-    return(dataset)
+    stop('    Invalid col_names specified.\n')
   }
   
   # Foreach column in col_names, generate flag if negative number detected
@@ -699,8 +702,7 @@ check_col_reqs <- function(dataset, stage, create_missing = F) {
       dataset[, eval(missing_cols) := NA]
       return(dataset)
     } else {
-      cat(red('    ERROR: Missing some required columns!! Ensure your data contains the following columns: ')); cat(yellow(paste(missing_cols, collapse=", "))); cat("\n")
-      return(dataset)
+      stop('    Missing some required columns!! Ensure your data contains the following columns: ', paste(missing_cols, collapse=", "))
     }
   }
 }
@@ -715,15 +717,13 @@ check_col_obs <- function(dataset, std_colname, dataset_colname) {
   
   # Ensure provided dataset_colname is observed in provided dataset
   if (dataset_colname %ni% names(dataset)) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [dataset_colname]!! ENSURE [dataset_colname] IS ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [dataset_colname]!! ENSURE [dataset_colname] IS ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
   }
   
   # Ensure provided std_colname is valid
   yaml <- yaml.load_file(paste0(code_repo, "FUNCTIONS/dah_parameters.yml"))$valid_observations
   if (toupper(std_colname) %ni% names(yaml)) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [std_colname]!! ENSURE [std_colname] IS ONE OF THE FOLLOWING:'), paste(names(yaml), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [std_colname]!! ENSURE [std_colname] IS ONE OF THE FOLLOWING: ', paste(names(yaml), collapse=', '))
   }
   
   # Collect valid observations & ensure input dataset is a data.table
@@ -739,8 +739,7 @@ check_col_obs <- function(dataset, std_colname, dataset_colname) {
   # Check for invalid observations of dataset_colname in dataset
   if (any(unique(dataset[, get(dataset_colname)]) %ni% valid_obs)) {
     violations <- unique(dataset[, get(dataset_colname)]) %ni% valid_obs
-    cat(paste0(red('    ERROR: INVALID OBSERVATIONS OF ['), white(dataset_colname), red(']!! PLEASE RECODE THESE OBSERVATIONS ['), yellow(violations), red('] AS ONE OF THE FOLLOWING: ['), green(valid_obs), red(']\n')))
-    return(dataset)
+    stop('    INVALID OBSERVATIONS OF [', dataset_colname, ']!! PLEASE RECODE THESE OBSERVATIONS [', violations, '] AS ONE OF THE FOLLOWING: [', valid_obs, ']')
   } else {
     cat(green(paste0('    SUCCESS: ALL OBSERVATIONS OF [', dataset_colname, '] ARE VALID!!')))
   }
@@ -760,20 +759,17 @@ covid_intercept <- function(dataset, year_colname, keyword_search_colnames) {
   
   # Handle user errors
   if (year_colname %ni% names(dataset)) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [year_colname]!! ENSURE [year_colname] IS ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [year_colname]!! ENSURE [year_colname] IS ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
   }
   if (any(keyword_search_colnames %ni% names(dataset))) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] INCLUDE ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] INCLUDE ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
   }
   for (col in keyword_search_colnames) {
     dataset[, upper := toupper(get(col))]
     dataset[upper != get(col), check := 1]
     if (1 %in% unique(dataset$check)) {
       dataset[, `:=`(upper = NULL, check = NULL)]
-      cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] CONTAIN CLEANED STRINGS!!\n'))
-      return(dataset)
+      stop('    SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] CONTAIN CLEANED STRINGS!!\n')
     }
     dataset[, `:=`(upper = NULL, check = NULL)]
   }
@@ -791,12 +787,6 @@ covid_intercept <- function(dataset, year_colname, keyword_search_colnames) {
                 str_detect(string = get(col), pattern = keyword)]
     }
   }
-  
-  # Drop projects where a COVID keyword was tagged - not going to do in the function, leaving this up to each channel
-  # for (col in keyword_search_colnames) {
-  #   dataset <- dataset[get(paste0(col, '_srch')) == 0, ]
-  #   dataset[, eval(paste0(col, '_srch')) := NULL]
-  # }
   
   # Return the subset data
   return(dataset)
@@ -822,13 +812,11 @@ covid_kws <- function(dataset, keyword_search_colnames, keep_clean = T, keep_cou
   
   # Handle user errors
   if (any(keyword_search_colnames %ni% names(dataset))) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] INCLUDE ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [keyword_search_colnames]!! ENSURE [keyword_search_colnames] INCLUDE ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
   }
   if (length(languages) != 9) {
     if (any(tolower(languages) %ni% names(keywords))) {
-      cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [languages]!! ENSURE [languages] INCLUDES AT LEAST ONE OF THE FOLLOWING:'), paste(names(keywords), collapse=', '), '\n')
-      return(dataset)
+      stop('    SUPPLIED INVALID PARAMETER: [languages]!! ENSURE [languages] INCLUDES AT LEAST ONE OF THE FOLLOWING: ', paste(names(keywords), collapse=', '))
     }
   }
   
@@ -917,25 +905,21 @@ covid_stats_report <- function(dataset, amount_colname = NULL, recipient_iso_col
   # Handle user errors
   if (save_plot) {
     if (is.null(output_path)) {
-      cat(paste0(red('  ERROR: PARAMETER [save_plot] WAS SPECIFIED AS [TRUE], BUT NO [output_path] WAS PROVIDED!!\n')))
-      return(dataset)
+      stop('    PARAMETER [save_plot] WAS SPECIFIED AS [TRUE], BUT NO [output_path] WAS PROVIDED!!\n')
     }
   }
   if (!is.null(amount_colname)) {
     if (amount_colname %ni% names(dataset)) {
-      cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [amount_colname]!! ENSURE [amount_colname] IS ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-      return(dataset)
+      stop('    SUPPLIED INVALID PARAMETER: [amount_colname]!! ENSURE [amount_colname] IS ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
     }
     if (!is.null(recipient_iso_colname)) {
       if (recipient_iso_colname %ni% names(dataset)) {
-        cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [recipient_iso_colname]!! ENSURE [recipient_iso_colname] IS ONE OF THE FOLLOWING:'), paste(names(dataset), collapse=', '), '\n')
-        return(dataset)
+        stop('    SUPPLIED INVALID PARAMETER: [recipient_iso_colname]!! ENSURE [recipient_iso_colname] IS ONE OF THE FOLLOWING: ', paste(names(dataset), collapse=', '))
       }
     }
   }
   if (is.null(amount_colname) & !is.null(recipient_iso_colname)) {
-    cat(red('    ERROR: SUPPLIED INVALID PARAMETER: [amount_colname]!! BECAUSE YOU SPECIFIED A [recipient_iso_colname], YOU MUST ALSO PROVIDE AN [amount_colname]\n'))
-    return(dataset)
+    stop('    SUPPLIED INVALID PARAMETER: [amount_colname]!! BECAUSE YOU SPECIFIED A [recipient_iso_colname], YOU MUST ALSO PROVIDE AN [amount_colname]\n')
   }
   
   cat('  SUMMARY STATISTICS:\n  ')
@@ -950,6 +934,7 @@ covid_stats_report <- function(dataset, amount_colname = NULL, recipient_iso_col
     rm(area, stat)
   }
   cat('\n')
+  
   # Place summary stats in data.table
   pa_map <- data.table('PA' = c(PAs, 'OTHER'), 'pa_name' = c('Country-level coordination, \nplanning, monitoring, \nand evaluation',
                                                              'Risk communication and \ncommunity engagement', 
@@ -1030,7 +1015,7 @@ covid_stats_report <- function(dataset, amount_colname = NULL, recipient_iso_col
   
   # Save the plot if desired
   if (save_plot) {
-    cat(paste0('  Saving plot to: ', output_path))
+    cat(paste0('  Saving plot to: ', output_path, '\n'))
     ggsave(plot = plot, filename = paste0(output_path, 'COVID_kws_report.png'), device = 'png', width = 15, height = 10)
   }
 }
